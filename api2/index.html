@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumir API Local</title>
+</head>
+<body>
+
+    <h1>Dados da Tabela Professor</h1>
+
+    <div id="data-container"></div>
+<!--Parte que consome da tabela Professor-->
+    <script>
+        // Função para fazer a requisição à API local
+        async function fetchData() {
+            try {
+                // URL da API local
+                var apiUrl = 'http://localhost:8081/ListarProfessor';
+
+                // Fazendo a requisição usando a função fetch
+                var response = await fetch(apiUrl,{
+                    method: "post"
+                });
+
+                // Verifica se a resposta da API foi bem-sucedida
+                if (response.ok) {
+                    // Processa os dados da API
+                    var responseData = await response.json();
+                    displayData(responseData);
+                } else {
+                    // Se a resposta da API não foi bem-sucedida, lança um erro
+                    throw new Error('Erro ao carregar dados da API local.');
+                }
+            } catch (error) {
+                // Exibe mensagens de erro no console
+                console.error(error.message);
+            }
+        }
+
+        // Função para exibir os dados na página
+        function displayData(data) {
+            var dataContainer = document.getElementById('data-container');
+
+            // Limpa o conteúdo anterior, se houver
+            dataContainer.innerHTML = '';
+
+            // Cria um elemento de parágrafo para cada dado recebido e os adiciona à página
+            for (var i = 0; i < data.length; i++) {
+                var professor = data[i];
+                var itemElement = document.createElement('p');
+                itemElement.innerHTML = `<strong>Nome:</strong> ${professor.nome}, <strong>Sobrenome:</strong> ${professor.sobrenome}, <strong>Matricula:</strong> ${professor.matricula}, <strong>CPF:</strong> ${professor.cpf}, <strong>Disciplina:</strong> ${professor.disciplina}`;
+                dataContainer.appendChild(itemElement);
+            }
+        }
+
+        // Chama a função fetchData ao carregar a página
+        fetchData();
+    </script>
+
+
+<h1>Dados da Tabela Aluno</h1>
+
+    
+
+</body>
+</html>
